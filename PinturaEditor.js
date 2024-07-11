@@ -47,7 +47,7 @@ const parseMessage = (str) => deepReplaceValues(JSON.parse(str), replaceValues);
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 const Editor = forwardRef((props, ref) => {
-    const { style, styleRules, ...options } = props;
+    const { style, styleRules, watermark,...options } = props;
     const [source, setSource] = useState({});
     const webViewRef = useRef(null);
 
@@ -72,9 +72,8 @@ const Editor = forwardRef((props, ref) => {
 
     // this passes options to the editor
     useEffect(() => {
-        webViewRef.current.postMessage(stringifyMessage({ editorOptions: options }));
-    }, [webViewRef, options]);
-
+        webViewRef.current.postMessage(stringifyMessage({ editorOptions: options, watermark }));
+    }, [watermark, webViewRef, options]);
     // this passes style rules to the editor
     useEffect(() => {
         webViewRef.current.postMessage(stringifyMessage({ editorStyleRules: styleRules }));
@@ -119,6 +118,7 @@ const Editor = forwardRef((props, ref) => {
                             stringifyMessage({
                                 editorStyleRules: styleRules,
                                 editorOptions: options,
+                                watermark
                             })
                         );
                     }
